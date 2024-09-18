@@ -1,5 +1,15 @@
 import Cliente from "../models/Cliente.js";
 
+// GET: Obtener todos los clientes
+export const getClientes = async (req, res) => {
+    try {
+        const clientes = await Cliente.find();
+        return res.status(200).json(clientes);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 // GET: Obtener mediante id
 export const getClienteById = async (req, res) => {
     try {

@@ -1,0 +1,172 @@
+Aquí tienes un **README** para tu proyecto. He incluido los aspectos clave del proyecto como la descripción, instalación, uso de Postman, y otros detalles importantes.
+
+---
+
+# Gestión de Clientes, Usuarios y Cuentas de Ahorro - API
+
+Este proyecto es una **API REST** desarrollada en **Node.js** con **Express** y **MongoDB**, que permite gestionar **clientes**, **usuarios** y **cuentas de ahorro**. Incluye autenticación con **JWT** para proteger los recursos sensibles como las operaciones con cuentas de ahorro.
+
+## Tabla de Contenidos
+
+1. [Requisitos Previos](#requisitos-previos)
+2. [Instalación](#instalación)
+3. [Configuración del Proyecto](#configuración-del-proyecto)
+4. [Ejecución del Proyecto](#ejecución-del-proyecto)
+5. [Rutas de la API](#rutas-de-la-api)
+6. [Uso de la API con Postman](#uso-de-la-api-con-postman)
+7. [Seguridad y Autenticación](#seguridad-y-autenticación)
+8. [Contribución](#contribución)
+
+## Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalados los siguientes programas en tu sistema:
+
+- **Node.js** (versión 14 o superior)
+- **MongoDB** (local o en la nube con MongoDB Atlas)
+
+## Instalación
+
+Clona este repositorio e instala las dependencias del proyecto utilizando **npm** o **yarn**:
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/LauraGA777/taller5-node.git
+
+# Navegar al directorio del proyecto
+cd taller5-node
+
+# Instalar dependencias
+npm install
+```
+
+## Configuración del Proyecto
+
+Crea un archivo `.env` en la raíz del proyecto para configurar las variables de entorno. Aquí tienes un ejemplo de archivo `.env`:
+
+```bash
+# Puerto del servidor
+PORT=3000
+
+# URL de conexión a MongoDB
+DB_URI=mongodb://localhost:27017/gestion_clientes
+
+# Clave secreta para firmar los tokens JWT
+JWT_SECRET=mi_clave_secreta
+
+# Clave secreta para los tokens de refresco (si usas refresh tokens)
+REFRESH_SECRET=mi_clave_secreta_refresh
+```
+
+## Ejecución del Proyecto
+
+Para ejecutar el servidor en modo de desarrollo, usa el siguiente comando:
+
+```bash
+npm start
+```
+
+El servidor comenzará a ejecutarse en el puerto configurado (por defecto, en el puerto 3000). Accede a `http://localhost:3000` para comprobar si el servidor está corriendo correctamente.
+
+## Rutas de la API
+
+### 1. **Clientes**
+
+| Método | Ruta                    | Descripción                          |
+|--------|--------------------------|--------------------------------------|
+| GET    | `/api/clientes`           | Listar todos los clientes            |
+| GET    | `/api/clientes/:id`       | Obtener un cliente por su ID         |
+| POST   | `/api/clientes`           | Crear un nuevo cliente               |
+| PUT    | `/api/clientes/:id`       | Actualizar un cliente por su ID      |
+| DELETE | `/api/clientes/:id`       | Eliminar un cliente por su ID        |
+
+### 2. **Usuarios**
+
+| Método | Ruta                    | Descripción                          |
+|--------|--------------------------|--------------------------------------|
+| GET    | `/api/usuarios`           | Listar todos los usuarios            |
+| GET    | `/api/usuarios/:id`       | Obtener un usuario por su ID         |
+| POST   | `/api/usuarios`           | Crear un nuevo usuario               |
+| PUT    | `/api/usuarios/:id`       | Actualizar un usuario por su ID      |
+| DELETE | `/api/usuarios/:id`       | Eliminar un usuario por su ID        |
+
+### 3. **Cuentas de Ahorro**
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | `/api/cuentaAhorros/:id`           | Obtener una cuenta de ahorro por su ID   |
+| POST   | `/api/cuentaAhorros/crear`         | Crear una nueva cuenta de ahorro         |
+| PUT    | `/api/cuentaAhorros/consignar`     | Consignar dinero en una cuenta           |
+| PUT    | `/api/cuentaAhorros/saldo-cero`    | Poner el saldo de una cuenta en cero     |
+| DELETE | `/api/cuentaAhorros/:id`           | Eliminar una cuenta de ahorro            |
+
+## Uso de la API con Postman
+
+### 1. **Autenticación de Usuarios (JWT)**
+
+Para acceder a rutas protegidas como las de **cuentas de ahorro**, primero necesitas **autenticarte** y obtener un **token JWT**.
+
+- **POST** `/api/usuarios/acceder`
+  - **Body** (raw JSON):
+    ```json
+    {
+      "nombreUsuario": "tu_usuario",
+      "contrasena": "tu_contraseña"
+    }
+    ```
+
+  - **Respuesta**:
+    ```json
+    {
+      "message": "Acceso concedido",
+      "token": "tu_token_jwt"
+    }
+    ```
+
+  Guarda el token JWT y úsalo en las siguientes solicitudes.
+
+### 2. **Acceso a Cuentas de Ahorro (Protegido con JWT)**
+
+- **GET** `/api/cuentaAhorros/:id`
+  - **Headers**:
+    ```plaintext
+    Authorization: Bearer <tu_token_jwt>
+    ```
+
+Este token se debe enviar en el **header de autorización** como `Bearer <tu_token_jwt>` en cada solicitud protegida.
+
+## Seguridad y Autenticación
+
+Esta API utiliza **JSON Web Tokens (JWT)** para proteger las rutas que manejan información sensible, como las **cuentas de ahorro**. El token JWT se genera cuando el usuario se autentica correctamente y se debe enviar en cada solicitud protegida en el header de la solicitud.
+
+### Middleware de Verificación de Token
+
+El middleware `verificarToken` se encarga de verificar que las solicitudes protegidas lleven un token válido. Si el token no es válido o no se proporciona, la solicitud será rechazada.
+
+```javascript
+export const verificarToken = (req, res, next) => {
+    const token = req.header('Authorization');
+    
+    if (!token) {
+        return res.status(401).json({ message: 'Acceso denegado. No se proporcionó un token.' });
+    }
+
+    try {
+        const tokenJwt = token.split(' ')[1];  // Eliminar 'Bearer ' y obtener el token
+        const verified = jwt.verify(tokenJwt, process.env.JWT_SECRET);
+        req.usuario = verified;  // Guarda los datos del usuario verificado
+        next();  // Continua al siguiente middleware o controlador
+    } catch (error) {
+        return res.status(400).json({ message: 'Token no válido' });
+    }
+};
+```
+
+## Contribución
+
+Si deseas contribuir a este proyecto:
+
+1. Haz un fork del repositorio.
+2. Crea una rama con la nueva funcionalidad (`git checkout -b nueva-funcionalidad`).
+3. Haz commit de tus cambios (`git commit -m 'Agrega nueva funcionalidad'`).
+4. Haz push a la rama (`git push origin nueva-funcionalidad`).
+5. Abre un Pull Request.

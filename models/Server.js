@@ -4,6 +4,7 @@ import connectDB from "../database/Config.js";
 import routerClientes from "../routes/Clientes.routes.js";
 import routerUsuarios from "../routes/Usuario.routes.js";
 import routerCuentaAhorros from "../routes/CuentaAhorros.routes.js";
+import cors from 'cors';  
 
 
 export default class Server {
@@ -33,6 +34,7 @@ export default class Server {
     }
 
     middlewares() {
+        this.app.use(cors());
         // Lectura y parseo del body
         this.app.use(express.json());
     }

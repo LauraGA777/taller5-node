@@ -1,3 +1,3 @@
 import Server from "./models/Server.js";
 
-new Server();
+const server = new Server();
