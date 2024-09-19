@@ -4,9 +4,8 @@ import connectDB from "../database/Config.js";
 import routerClientes from "../routes/Clientes.routes.js";
 import routerUsuarios from "../routes/Usuario.routes.js";
 import routerCuentaAhorros from "../routes/CuentaAhorros.routes.js";
-import Home from "../models/Home.js";
 import cors from 'cors';  
-
+import Home from "../models/Home.js";
 
 export default class Server {
     constructor() {
@@ -50,7 +49,6 @@ export default class Server {
 
     listen() {
         this.app.listen(process.env.PORT, () => {
-            console.log(`Server is running at http://localhost:${process.env.PORT}`);
         });
     }
 }
