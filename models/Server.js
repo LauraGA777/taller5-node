@@ -4,6 +4,7 @@ import connectDB from "../database/Config.js";
 import routerClientes from "../routes/Clientes.routes.js";
 import routerUsuarios from "../routes/Usuario.routes.js";
 import routerCuentaAhorros from "../routes/CuentaAhorros.routes.js";
+import Home from "../models/Home.js";
 import cors from 'cors';  
 
 
@@ -14,6 +15,7 @@ export default class Server {
         this.clientesPath = '/api/clientes';
         this.usuariosPath = '/api/usuarios';
         this.cuentaAhorroPath = '/api/cuentaAhorros';
+        this.homePath = '/';
 
         // Conectar a la base de datos
         this.conectarDB();
@@ -43,6 +45,7 @@ export default class Server {
         this.app.use(this.clientesPath, routerClientes);
         this.app.use(this.usuariosPath, routerUsuarios);
         this.app.use(this.cuentaAhorroPath,routerCuentaAhorros);
+        this.app.use(this.homePath, Home);
     }
 
     listen() {
