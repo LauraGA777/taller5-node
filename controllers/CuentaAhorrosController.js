@@ -2,6 +2,17 @@ import CuentaAhorro from "../models/CuentaAhorros.js";
 import Cliente from "../models/Cliente.js";
 import bcrypt from 'bcrypt';
 
+// GET: Obtener todos las cuentas
+
+export const getCuentasAhorro = async (req, res) => {
+    try {
+        const cuentas = await CuentaAhorro.find();
+        return res.status(200).json(cuentas);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 // GET: Listar los datos de una cuenta y poblar los datos del cliente
 export const getCuentaAhorroByDocumento = async (req, res) => {
     try {
@@ -11,7 +22,7 @@ export const getCuentaAhorroByDocumento = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
 
 // POST: Crear una cuenta
 export const postCuentaAhorro = async (req, res) => {

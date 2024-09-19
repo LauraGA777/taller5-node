@@ -3,12 +3,10 @@ import verificarToken  from '../middleware/auth.js';
 
 const routerCuentaAhorros = Router()
 
-import { getCuentaAhorroByDocumento, postCuentaAhorro, consignarDinero, retirarDinero ,deleteCuentaAhorro, } from '../controllers/CuentaAhorrosController.js'
+import { getCuentasAhorro, getCuentaAhorroByDocumento, postCuentaAhorro, consignarDinero, retirarDinero ,deleteCuentaAhorro, } from '../controllers/CuentaAhorrosController.js'
 
 
-routerCuentaAhorros.get('/', (req, res) => {
-    res.send('Hola desde la ruta de cuenta ahorros');
-})
+routerCuentaAhorros.get('/', getCuentasAhorro)
 routerCuentaAhorros.get('/:id', verificarToken ,getCuentaAhorroByDocumento)
 routerCuentaAhorros.post('/', postCuentaAhorro)
 routerCuentaAhorros.put('/consignar', verificarToken, consignarDinero)

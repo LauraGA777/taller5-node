@@ -2,7 +2,7 @@ import Router from "express";
 
 const routerUsuarios = Router();
 
-import { getUsuarioById, postUsuario, putUsuario, deleteUsuario, accederAPI } from '../controllers/UserController.js'
+import { getUsuarios,getUsuarioById, postUsuario, putUsuario, deleteUsuario, accederAPI } from '../controllers/UserController.js'
 
 const validarCamposAcceso = (req, res, next) => {
     const { nombreUsuario, contrasena } = req.body;
@@ -13,9 +13,7 @@ const validarCamposAcceso = (req, res, next) => {
 };
 
 
-routerUsuarios.get('/', (req, res) => {
-    res.send('Hola desde la ruta de usuarios');
-})
+routerUsuarios.get('/', getUsuarios)
 routerUsuarios.get('/:id', getUsuarioById)
 routerUsuarios.post('/', postUsuario)
 routerUsuarios.put('/:id', putUsuario)
