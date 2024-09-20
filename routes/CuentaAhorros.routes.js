@@ -7,10 +7,10 @@ import { getCuentasAhorro, getCuentaAhorroByDocumento, postCuentaAhorro, consign
 
 
 routerCuentaAhorros.get('/', getCuentasAhorro)
-routerCuentaAhorros.get('/:id', verificarToken ,getCuentaAhorroByDocumento)
+routerCuentaAhorros.get('/:id', getCuentaAhorroByDocumento)
 routerCuentaAhorros.post('/', postCuentaAhorro)
-routerCuentaAhorros.put('/consignar', verificarToken, consignarDinero)
-routerCuentaAhorros.put('/retirar', verificarToken, retirarDinero)
-routerCuentaAhorros.delete('/:id', verificarToken, deleteCuentaAhorro)
+routerCuentaAhorros.put('/consignar', consignarDinero)
+routerCuentaAhorros.put('/retirar', retirarDinero)
+routerCuentaAhorros.delete('/:id',deleteCuentaAhorro)
 
 export default routerCuentaAhorros;
