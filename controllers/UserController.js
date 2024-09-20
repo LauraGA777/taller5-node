@@ -68,7 +68,7 @@ export const accederAPI = async (req, res) => {
     try {
         // Buscar usuario por nombre de usuario y estado
         const usuario = await Usuario.findOne({ nombreUsuario });
-        if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado o inactivo' });
+        if (!usuario) return res.status(404).json({ message: 'La combinación de usuario y contraseña no coincide. Por favor, verifica e intenta nuevamente.' });
 
         // Verificar si el usuario está activo
         if (usuario.estado !== 'activo') {

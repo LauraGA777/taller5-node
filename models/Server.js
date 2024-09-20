@@ -38,6 +38,10 @@ export default class Server {
         this.app.use(cors());
         // Lectura y parseo del body
         this.app.use(express.json());
+        this.app.use((err, req, res, next) => {
+            console.error(err.stack);
+            res.status(500).send('Something broke!');
+        });
     }
 
     routes() {
