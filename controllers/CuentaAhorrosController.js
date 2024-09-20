@@ -75,13 +75,10 @@ export const retirarDinero = async (req, res) => {
 }
 
 // DELETE: Eliminar una cuenta
-// DELETE: Eliminar una cuenta
 export const deleteCuentaAhorro = async (req, res) => {
     try {
         const cuenta = await CuentaAhorro.findById(req.params.id);
         if (!cuenta) return res.status(404).json({ message: 'Cuenta no encontrada' });
-
-        if (cuenta.saldo !== 0) return res.status(400).json({ message: 'El saldo debe ser cero para eliminar la cuenta' });
 
         await CuentaAhorro.deleteOne({ _id: req.params.id });
         return res.status(200).json({ message: 'Cuenta eliminada' });
