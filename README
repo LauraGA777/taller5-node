@@ -1,7 +1,3 @@
-Aquí tienes un **README** para tu proyecto. He incluido los aspectos clave del proyecto como la descripción, instalación, uso de Postman, y otros detalles importantes.
-
----
-
 # Gestión de Clientes, Usuarios y Cuentas de Ahorro - API
 
 Este proyecto es una **API REST** desarrollada en **Node.js** con **Express** y **MongoDB**, que permite gestionar **clientes**, **usuarios** y **cuentas de ahorro**. Incluye autenticación con **JWT** para proteger los recursos sensibles como las operaciones con cuentas de ahorro.
